@@ -1,13 +1,14 @@
-import { useState } from 'react';
+type Props = {
+  onChange: (value: string) => void;
+};
 
-const Dropdown = () => {
-  const [selected, setSelected] = useState('');
-
+const Dropdown = ({ onChange }: Props) => {
+  let selected;
   return (
     <select
       id="specialization"
       value={selected}
-      onChange={(e) => setSelected(e.target.value)}
+      onChange={(e) => onChange(e.target.value)}
       className="w-[485px] p-2 border-gray-200 border-1 rounded-[5px] mb-10 text-gray-600"
     >
       <option value="" disabled>

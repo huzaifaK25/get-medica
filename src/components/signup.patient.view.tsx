@@ -1,18 +1,41 @@
 'use client';
 import React from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ImageBox from './image.box';
 
 const SignupPatientView = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const user = { name, email, password };
+
+    // API call here
+    console.log(user);
+
+    // Clear fields after submit
+    setName('');
+    setEmail('');
+    setPassword('');
+
+    router.push('/login');
+  };
+
   return (
-    <main className="m-0 p-0 max-w-screen w-full min-h-[100dvh] overflow-x-hidden">
+    <main
+      className="m-0 p-0 max-w-screen w-full min-h-[100dvh] overflow-x-hidden"
+      id="patient-signup-page"
+    >
       <section className="flex flex-row">
         <ImageBox />
         {/* form box */}
         <div className="w-[80%] m-auto h-[100dvh] flex items-center justify-center font-sans z-[3]">
           {/* form */}
-          <form className="flex flex-col w-fit h-fit">
+          <form onSubmit={handleSubmit} className="flex flex-col w-fit h-fit">
             <p className="text-4xl font-semibold pb-10">Sign Up:</p>
             {/* input title box */}
             {/* Name */}
@@ -23,9 +46,12 @@ const SignupPatientView = () => {
             </div>
             <input
               className="w-[485px] p-2 border-gray-200 border-1 rounded-[5px] mb-10"
-              type="email"
+              type="text"
+              name="name"
+              value={name}
               required
               placeholder="John Doe"
+              onChange={(e) => setName(e.target.value)}
             />
             {/* Email */}
             <div className="flex flex-row items-center justify-start gap-1 mb-2.5">
@@ -36,8 +62,11 @@ const SignupPatientView = () => {
             <input
               className="w-[485px] p-2 border-gray-200 border-1 rounded-[5px] mb-10"
               type="email"
+              name="email"
+              value={email}
               required
               placeholder="eg. john@ex.com"
+              onChange={(e) => setEmail(e.target.value)}
             />
             {/* Password */}
             <div className="flex flex-row items-center justify-start gap-1 mb-2.5">
@@ -48,13 +77,16 @@ const SignupPatientView = () => {
             <input
               className="w-[485px] p-2 mb-5  border-gray-200 border-1 rounded-[5px]"
               type="password"
+              name="password"
+              value={password}
               required
               placeholder="Enter Password"
+              onChange={(e) => setPassword(e.target.value)}
             />
             <div className="text-center">
               <button
                 className="bg-[var(--primary-color)] text-white w-[485px] h-[60px] px-1 py-5 border-[var(--primary-color)] rounded-xl cursor-pointer mt-7.5 hover:bg-blue-600"
-                onClick={() => router.push('/patient-home')}
+                type="submit"
               >
                 Continue
               </button>

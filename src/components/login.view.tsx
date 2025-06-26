@@ -5,7 +5,10 @@ import ImageBox from './image.box';
 const LoginView = () => {
   const lexend = font.default.theme.extend.fontFamily.lexend;
   return (
-    <main className="m-0 p-0 max-w-screen w-full min-h-[100dvh] overflow-x-hidden">
+    <main
+      className="m-0 p-0 max-w-screen w-full min-h-[100dvh] overflow-x-hidden"
+      id="login-page"
+    >
       <section className="flex flex-row">
         <ImageBox />
         {/* form box */}

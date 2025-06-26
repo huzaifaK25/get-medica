@@ -3,16 +3,16 @@ import { FiBell, FiUser } from 'react-icons/fi';
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <div className=" border-2 grid [grid-template-columns:1fr_5fr] [grid-template-rows:1fr_6fr] h-[100dvh] w-[100%]">
+      <div className=" border-2 grid [grid-template-columns:1fr_5fr] [grid-template-rows:1fr_6fr] h-[100dvh] w-[100%] overflow-hidden">
         {/* Sidebar */}
         <div className="row-start-1 row-end-3 bg-[var(--primary-color)]">
           {/* logo */}
           <div className="relative">
-            <div className="absolute rounded-full z-[2] top-10 left-21 ">
+            <div className="absolute rounded-full z-[2] top-10 left-30">
               <img src="./Medinova.svg" alt="" />
             </div>
-            <div className="relative flex flex-col justify-between bg-[var(--primary-color)] h-[100dvh] overflow-hidden ">
-              <div className="font-sans text-[30px] text-white font-semibold bg-transparent mx-10 mb-0 mt-17 w-fit py-[55px] ">
+            <div className=" flex flex-col bg-[var(--primary-color)] h-[100dvh] overflow-hidden ">
+              <div className="font-sans text-[30px] text-white font-semibold bg-transparent mx-auto mb-0 mt-17 w-fit py-[55px] ">
                 GETMEDICA
               </div>
             </div>
@@ -39,7 +39,6 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
         {/* Content panel */}
         <div className="col-start-2">{children}</div>
       </div>
-      {/* {children} */}
     </>
   );
 };

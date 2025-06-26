@@ -12,7 +12,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <HtmlHead />
-      <body>{children}</body>
+      <body className="border-2 border-amber-500">
+        <div>Main layout</div>
+        {children}
+      </body>
     </html>
   );
 }

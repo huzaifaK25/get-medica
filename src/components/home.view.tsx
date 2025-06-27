@@ -3,6 +3,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import doctorHome from '../../public/doctor-home.jpg';
 import patient from '../../public/patient.png';
+import { ROUTES } from '@/constants/route';
 
 const HomeView = () => {
   const router = useRouter();
@@ -66,7 +67,7 @@ const HomeView = () => {
       <div className="flex justify-center items-center w-full">
         <button
           className="rounded-xl bg-blue-500 text-2xl text-white px-6 py-2 hover:bg-blue-700 transition-all duration-300 ease-in-out"
-          onClick={() => router.push(`signup-${role}`)}
+          onClick={() => router.push(ROUTES.AUTH.DOCTOR_SIGNUP)}
         >
           Continue
         </button>

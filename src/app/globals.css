@@ -2,4 +2,10 @@
 
 :root {
   --primary-color: #18a0fb;
+  --secondary-color: #233232;
+}
+
+@theme inline {
+  --color-primary: var(--primary-color);
+  --color-secondary: var(--secondary-color);
 }

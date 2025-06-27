@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
-import HtmlHead from '@/components/html.head';
 import './globals.css';
 
-export const metadata: Metadata = {};
+export const metadata: Metadata = {
+  title: 'Get Medica',
+  description: 'APp for booking doctors appointments',
+};
 
 export default function RootLayout({
   children,
@@ -11,11 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <HtmlHead />
-      <body className="border-2 border-amber-500">
-        <div>Main layout</div>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

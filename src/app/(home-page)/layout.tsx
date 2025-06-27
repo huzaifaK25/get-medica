@@ -1,45 +1,75 @@
+import HomeLogo from '@/components/home.logo';
 import { FiBell, FiUser } from 'react-icons/fi';
+import SvgAppointment from '@/components/svg.appointment';
+import SvgAvailability from '@/components/svg.availability';
+import SvgDoctor from '@/components/svg.doctor';
 
-const HomeLayout = ({ children }: { children: React.ReactNode }) => {
+interface Props {
+  children: React.ReactNode;
+}
+type Role = 'doctor' | 'patient';
+// enum Role {
+//   DOCTOR = 'doctor',
+//   PATIENT = 'patient'
+// }
+const role: Role = 'doctor';
+
+const HomeLayout: React.FC<Props> = ({ children }) => {
   return (
-    <>
-      <div className=" border-2 grid [grid-template-columns:1fr_5fr] [grid-template-rows:1fr_6fr] h-[100dvh] w-[100%] overflow-hidden">
-        {/* Sidebar */}
-        <div className="row-start-1 row-end-3 bg-[var(--primary-color)]">
-          {/* logo */}
-          <div className="relative">
-            <div className="absolute rounded-full z-[2] top-10 left-30">
-              <img src="./Medinova.svg" alt="" />
+    <div className="flex flex-row h-screen w-vw overflow-x-hidden">
+      {/* side nav bar */}
+      <nav className=" w-1/6 bg-[var(--primary-color)]">
+        <HomeLogo />
+        <div className="flex flex-col mt-10 items-center gap-3">
+          {role === 'doctor' ? (
+            <>
+              <div className="flex flex-row items-center justify-start gap-1 rounded-[8px] bg-white text-[var(--primary-color)] font-semibold w-[80%] pt-1 pb-1 pr-1 pl-1">
+                <SvgAvailability /> Set Availability
+              </div>
+              <div className="flex flex-row items-center justify-start gap-1 rounded-[8px] bg-white text-[var(--primary-color)] font-semibold w-[80%] pt-1 pb-1 pr-1 pl-1">
+                <SvgAppointment />
+                Appointment
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex flex-row items-center justify-start gap-1 rounded-[8px] bg-white text-[var(--primary-color)] font-semibold w-[80%] pt-1 pb-1 pr-1 pl-1">
+                <SvgDoctor /> Doctor List
+              </div>
+              <div className="flex flex-row items-center justify-start gap-1 rounded-[8px] bg-white text-[var(--primary-color)] font-semibold w-[80%] pt-1 pb-1 pr-1 pl-1">
+                <SvgAppointment />
+                Appointment
+              </div>
+            </>
+          )}
+        </div>
+      </nav>
+      {/* right panel */}
+      <div className=" w-full">
+        {/* top nav bar */}
+        <div className="bg-gray-200  h-1/9 flex justify-end">
+          {/* profile box */}
+          <div className=" w-100 h-full flex flex-row justify-evenly items-center">
+            <div>
+              <div className="bg-[var(--primary-color)] w-15 h-15 rounded-full flex items-center justify-center">
+                <FiBell className="text-white w-10 h-10" />
+              </div>
             </div>
-            <div className=" flex flex-col bg-[var(--primary-color)] h-[100dvh] overflow-hidden ">
-              <div className="font-sans text-[30px] text-white font-semibold bg-transparent mx-auto mb-0 mt-17 w-fit py-[55px] ">
-                GETMEDICA
+            <div className=" w-40 flex flex-col justify-center items-start">
+              <p>Welcome</p>
+              <p className="font-bold">Dr. John Doe</p>
+            </div>
+            <div>
+              <div className="bg-[var(--primary-color)] w-15 h-15 rounded-full flex items-center justify-center">
+                <FiUser className="text-white w-10 h-10" />
               </div>
             </div>
           </div>
-          {/* sidebar pages */}
         </div>
-        {/* Top panel */}
-        <div className="bg-gray-200 flex items-center justify-end">
-          {/* profile box */}
-          <div className="flex flex-row items-center justify-between gap-8">
-            <div className="bg-[var(--primary-color)] w-15 h-15 rounded-full flex items-center justify-center">
-              <FiBell className="text-white w-10 h-10" />
-            </div>
-            <div className="flex items-start justify-center flex-col ">
-              <p className="">Welcome</p>
-              <p className="font-bold w-40">John Doe</p>
-            </div>
-            <div className="bg-[var(--primary-color)] w-15 h-15 rounded-full flex items-center justify-center">
-              <FiUser className="text-white w-10 h-10" />
-            </div>
-            <p></p>
-          </div>
-        </div>
-        {/* Content panel */}
-        <div className="col-start-2">{children}</div>
+        {/* content page */}
+        <div className="h-8/9">{children}</div>
       </div>
-    </>
+    </div>
   );
 };
 

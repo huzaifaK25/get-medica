@@ -67,7 +67,11 @@ const HomeView = () => {
       <div className="flex justify-center items-center w-full">
         <button
           className="rounded-xl bg-blue-500 text-2xl text-white px-6 py-2 hover:bg-blue-700 transition-all duration-300 ease-in-out"
-          onClick={() => router.push(ROUTES.AUTH.DOCTOR_SIGNUP)}
+          onClick={() =>
+            role
+              ? router.push(ROUTES.AUTH.DOCTOR_SIGNUP)
+              : alert('Please select a role')
+          }
         >
           Continue
         </button>

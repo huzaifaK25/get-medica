@@ -1,5 +1,5 @@
 import React from 'react';
-import AuthLogo from './auth.logo';
+import AuthLogo from './auth-logo';
 
 const ImageBox = () => {
   return (

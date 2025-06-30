@@ -1,5 +1,5 @@
 export const ROUTES = {
   AUTH: {
-    DOCTOR_SIGNUP: '/doctor-signup',
+    DOCTOR_SIGNUP: '/signup-doctor',
   },
 };

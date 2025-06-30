@@ -1,4 +1,4 @@
-import SignupDoctorView from '@/components/signup.doctor.view';
+import SignupDoctorView from '@/components/signup-doctor-view';
 import React from 'react';
 
 const SignupDoctor = () => {

@@ -1,34 +1,67 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useLogin } from '@/services/mutations/login.mutation';
+import { setCookie } from 'cookies-next';
+import { useFormik } from 'formik';
+import LoginSchema from '@/utils/login-schema';
 
 const LoginView = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
   const role = 'doctor';
+  const { mutateAsync, isPending } = useLogin();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const user = { email, password };
+  const formik = useFormik({
+    initialValues: { email: '', password: '' },
+    validationSchema: LoginSchema,
+    onSubmit: (values, { resetForm }) => {
+      console.log('✅ Submitted:', values);
+      resetForm(); // clear after submit
+    },
+  });
 
-    // TODO: API call here
-    console.log(user);
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   const user = { email, password };
 
-    setEmail('');
-    setPassword('');
+  //   // API call:
+  //   await mutateAsync(
+  //     {
+  //       email,
+  //       password,
+  //     },
+  //     {
+  //       onSuccess: (data, variables, context) => {
+  //         setCookie('accessToken', data.access_token);
+  //         alert(data.message);
+  //         // TODO: set user
+  //       },
+  //       onError: (error, variables, context) => {
+  //         alert(error?.message);
+  //       },
+  //     }
+  //   );
 
-    if (role === 'doctor') {
-      router.push('/doctor-home');
-    }
-    router.push('/patient-home');
-  };
+  //   setEmail('');
+  //   setPassword('');
+
+  //   if (role === 'doctor') {
+  //     router.push('/doctor-home');
+  //   }
+  //   router.push('/patient-home');
+  // };
 
   // Form Box
+
   return (
     <section id="inner box" className="flex flex-row">
       {/* form */}
-      <form onSubmit={handleSubmit} className="flex flex-col w-fit h-fit">
+      <form
+        onSubmit={formik.handleSubmit}
+        className="flex flex-col w-fit h-fit"
+      >
         <p className="text-4xl font-semibold pb-10">Log In:</p>
         {/* input title box */}
         <div className="flex flex-row items-center justify-start gap-1 mb-2.5">
@@ -37,26 +70,33 @@ const LoginView = () => {
           <p>:</p>
         </div>
         <input
-          className="w-[485px] p-2 border-gray-200 border-1 rounded-[5px] mb-10"
+          className="w-[485px] p-2 border-gray-200 border-1 rounded-[5px]"
+          id="email"
           type="email"
-          required
+          {...formik.getFieldProps('email')}
+          // required
           placeholder="eg. john@ex.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          // value={email}
+          // onChange={(e) => setEmail(e.target.value)}
         />
-        <div className="flex flex-row items-center justify-start gap-1 mb-2.5">
+        {formik.touched.email && formik.errors.email && (
+          <p className="mt-1 text-sm text-red-600">{formik.errors.email}</p>
+        )}
+        <div className="flex flex-row items-center justify-start gap-1 mb-2.5 mt-10">
           <p className="">Password</p>
           <p className="text-red-500">*</p>
           <p>:</p>
         </div>
         <input
-          className="w-[485px] p-2 mb-5  border-gray-200 border-1 rounded-[5px]"
+          className="w-[485px] p-2  border-gray-200 border-1 rounded-[5px]"
           type="password"
-          required
+          id="password"
           placeholder="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          {...formik.getFieldProps('password')}
         />
+        {formik.touched.password && formik.errors.password && (
+          <p className="mt-1 text-sm text-red-600">{formik.errors.password}</p>
+        )}
         <div className="text-end">
           <a
             href="#"

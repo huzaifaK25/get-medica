@@ -2,75 +2,42 @@
 import React from 'react';
 import { FiUser } from 'react-icons/fi';
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
+import axiosInstance from '@/utils/axios';
+import Spinner from '@/app/loading';
+import ErrorPage from '@/app/error';
+import { QueryClient } from '@tanstack/react-query';
 
-const doctorsList = [
-  {
-    id: 1,
-    name: 'Huzaifa Kashif',
-    specialization: 'Cardiology',
-    availability: 'Mon, Wed, Fri',
-    experience: 10,
-    rating: 4.2,
-  },
-  {
-    id: 2,
-    name: 'Huzaifa Kashif',
-    specialization: 'Cardiology',
-    availability: 'Mon, Wed, Fri',
-    experience: 10,
-    rating: 4.2,
-  },
-  {
-    id: 3,
-    name: 'Huzaifa Kashif',
-    specialization: 'Cardiology',
-    availability: 'Mon, Wed, Fri',
-    experience: 10,
-    rating: 4.2,
-  },
-  {
-    id: 4,
-    name: 'Huzaifa Kashif',
-    specialization: 'Cardiology',
-    availability: 'Mon, Wed, Fri',
-    experience: 10,
-    rating: 4.2,
-  },
-  {
-    id: 5,
-    name: 'Huzaifa Kashif',
-    specialization: 'Cardiology',
-    availability: 'Mon, Wed, Fri',
-    experience: 10,
-    rating: 4.2,
-  },
-  {
-    id: 6,
-    name: 'Huzaifa Kashif',
-    specialization: 'Cardiology',
-    availability: 'Mon, Wed, Fri',
-    experience: 10,
-    rating: 4.2,
-  },
-  {
-    id: 7,
-    name: 'Huzaifa Kashif',
-    specialization: 'Cardiology',
-    availability: 'Mon, Wed, Fri',
-    experience: 10,
-    rating: 4.2,
-  },
-  {
-    id: 8,
-    name: 'Huzaifa Kashif',
-    specialization: 'Cardiology',
-    availability: 'Mon, Wed, Fri',
-    experience: 10,
-    rating: 4.2,
-  },
-];
+const fetchDoctors = async () => {
+  const response = await axiosInstance.get('/users/all-doctors');
+  return response.data;
+};
 
 const PatientHome = () => {
+  // for invalidate cache data
+  const queryClient = new QueryClient();
+  const {
+    data: doctors = [],
+    error,
+    isPending,
+  } = useQuery({
+    queryKey: ['doctors'],
+    queryFn: fetchDoctors,
+  });
+
+  if (isPending) return <Spinner />;
+  if (error) return <ErrorPage />;
+
+  const doctorsList = doctors.doctors;
+  console.log(doctorsList);
+
+  // invalidate query example
+  function action() {
+    queryClient.invalidateQueries({
+      queryKey: ['doctors'],
+    });
+  }
+
   return (
     <div className="p-6">
       <div className="text-black font-semibold text-3xl mb-15">
@@ -94,7 +61,7 @@ const PatientHome = () => {
       </div>
       {/* doctors list */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
-        {doctorsList.map((doctor) => (
+        {doctorsList.map(({ ...doctor }) => (
           <div
             key={doctor.id}
             className="border-2 border-gray-400  rounded-[8px]  py-5 px-4"
@@ -106,15 +73,15 @@ const PatientHome = () => {
               <div>
                 <div className="font-bold text-xl">Dr. {doctor.name}</div>
                 <div className="text-primary font-medium text-4">
-                  {doctor.specialization}
+                  {doctor.doctor_detail.specialization}
                 </div>
               </div>
             </div>
             <div className="flex justify-between">
               <div className="flex flex-col gap-2 ">
-                <div>Availability: {doctor.availability}</div>
-                <div>{doctor.experience} Years of Experience</div>
-                <div>{doctor.rating} star rating</div>
+                <div>Availability: Mon, Wed, Fri</div>
+                <div>{doctor.doctor_detail.yearsOfExp} Years of Experience</div>
+                <div>{doctor.doctor_detail.rating} star rating</div>
               </div>
               <div className="flex items-end ">
                 <Link href={'/patient-home/book-appointment'}>

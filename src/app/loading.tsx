@@ -2,9 +2,9 @@ import { CSSProperties } from 'react';
 import ClipLoader from 'react-spinners/Cliploader';
 
 const override: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+  display: 'block',
+  margin: '0 auto',
+  marginTop: '200px',
 };
 const loading = true;
 
@@ -16,6 +16,7 @@ const Spinner = () => {
       aria-label="Loading Spinner"
       color="#4338ca"
       size={300}
+      speedMultiplier={1.1}
     />
   );
 };

@@ -3,6 +3,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Dropdown from './dropdown';
+import { useSignupDoctor } from '@/services/mutations/signup-doctor.mutation';
 
 const SignupDoctorView = () => {
   const [name, setName] = useState('');
@@ -10,25 +11,47 @@ const SignupDoctorView = () => {
   const [password, setPassword] = useState('');
   const [specialization, setSpecialization] = useState('');
   const router = useRouter();
+  const role = 'doctor';
+  const { mutateAsync, isPending } = useSignupDoctor();
+  // get specialization from dropdown component
+  const getSpecialization = (spec: string) => setSpecialization(spec);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const user = { name, email, password, specialization };
+    console.log(user);
 
     // API call here
-    console.log(user);
+    await mutateAsync(
+      {
+        name,
+        email,
+        password,
+        specialization,
+        role,
+        introduction: '',
+        rating: 0,
+        yearsOfExperience: 0,
+      },
+      {
+        onSuccess(data, variables, context) {
+          console.log(data.user);
+          alert(data.message);
+
+          router.push('/login');
+        },
+        onError(error, variables, context) {
+          alert(error.message);
+        },
+      }
+    );
 
     // Clear fields after submit
     setName('');
     setEmail('');
     setPassword('');
     setSpecialization('');
-
-    router.push('/login');
   };
-
-  // get specialization from dropdown component
-  const getSpecialization = (spec: string) => setSpecialization(spec);
 
   // For Box
   return (

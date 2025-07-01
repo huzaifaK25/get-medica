@@ -10,7 +10,7 @@ interface Props {
 }
 
 type Role = 'doctor' | 'patient';
-const role: Role = 'doctor';
+let role: Role = 'doctor';
 
 const HomeLayout: React.FC<Props> = ({ children }) => {
   return (

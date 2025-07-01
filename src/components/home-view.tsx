@@ -68,9 +68,9 @@ const HomeView = () => {
         <button
           className="rounded-xl bg-blue-500 text-2xl text-white px-6 py-2 hover:bg-blue-700 transition-all duration-300 ease-in-out"
           onClick={() =>
-            role
+            role === 'doctor'
               ? router.push(ROUTES.AUTH.DOCTOR_SIGNUP)
-              : alert('Please select a role')
+              : router.push(ROUTES.AUTH.PATIENT_SIGNUP)
           }
         >
           Continue

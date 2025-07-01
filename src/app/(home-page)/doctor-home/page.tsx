@@ -48,7 +48,7 @@ const DoctorHome = () => {
       </div>
       {/* button */}
       <div className="flex justify-end mt-10 mr-10">
-        <button className="bg-primary text-white px-15 py-3 rounded-[5px]">
+        <button className="bg-primary text-white px-15 py-3 rounded-[5px] cursor-pointer">
           Save
         </button>
       </div>

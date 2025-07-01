@@ -68,16 +68,15 @@ const Appointment = () => {
   const week = getWeekDays(today);
 
   return (
-    <div className="px-6 pt-4 flex flex-col">
-      <div className="flex mb-8 mt-8 items-center justify-between">
+    <div className="p-6 flex flex-col">
+      <div className="flex mb-8 items-center justify-between">
         <div className="text-black font-semibold text-3xl">
           View Appointments
         </div>
         <select className="border-1 border-gray-400 text-gray-400 text-xl px-4 py-1">
           <option value="" disabled></option>
           <option value="Pending">Pending</option>
-          <option value="Confirmed"></option>
-          <option value="Expired"></option>
+          <option value="Confirmed">Confirmed</option>
         </select>
       </div>
       <div className="flex items-center justify-between mt-6 mb-4">

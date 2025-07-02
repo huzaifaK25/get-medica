@@ -15,6 +15,9 @@ const protectedRoutes = [
   ROUTES.DASHBOARD.PATIENT_APPT,
   ROUTES.DASHBOARD.PATIENT_BOOK_APPT,
 ];
+export const config = {
+  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
+};
 
 export default async function middleware(req: NextRequest) {
   const res = NextResponse;
@@ -24,8 +27,8 @@ export default async function middleware(req: NextRequest) {
   const isPublic = publicRoutes.includes(path);
   console.log('Current Path: ', path);
 
-  //   // gets cookie value
-  //   const cookie = await getCookie('accessToken', { cookies });
+  // gets cookie value
+  const cookie = await getCookie('accessToken', { cookies });
 
   //   // Redirect to /login if user not authenticated
   //   if (isProtected && !cookie) {
@@ -38,7 +41,3 @@ export default async function middleware(req: NextRequest) {
   //   // middleware next()
   return res.next();
 }
-
-export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
-};

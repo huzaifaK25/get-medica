@@ -1,63 +1,57 @@
 'use client';
 import React from 'react';
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Dropdown from './dropdown';
 import { useSignupDoctor } from '@/services/mutations/signup-doctor.mutation';
+import { useFormik } from 'formik';
+import SignupDoctorSchema from '@/utils/signup-doctor-schema';
 
 const SignupDoctorView = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [specialization, setSpecialization] = useState('');
   const router = useRouter();
   const role = 'doctor';
   const { mutateAsync, isPending } = useSignupDoctor();
-  // get specialization from dropdown component
-  const getSpecialization = (spec: string) => setSpecialization(spec);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const user = { name, email, password, specialization };
-    console.log(user);
-
-    // API call here
-    await mutateAsync(
-      {
-        name,
-        email,
-        password,
-        specialization,
-        role,
-        introduction: '',
-        rating: 0,
-        yearsOfExperience: 0,
-      },
-      {
-        onSuccess(data, variables, context) {
-          console.log(data.user);
-          alert(data.message);
-
-          router.push('/login');
+  // form state
+  const formik = useFormik({
+    validationSchema: SignupDoctorSchema,
+    initialValues: { name: '', email: '', specialization: '', password: '' },
+    onSubmit: async (values, { resetForm }) => {
+      // API call sends data to server
+      await mutateAsync(
+        // values + fields in backend API
+        {
+          name: values.name,
+          email: values.email,
+          password: values.password,
+          specialization: values.specialization,
+          role,
+          introduction: '',
+          rating: 0,
+          yearsOfExperience: 0,
         },
-        onError(error, variables, context) {
-          alert(error.message);
-        },
-      }
-    );
+        {
+          onSuccess: (data, variables, context) => {
+            resetForm();
+            alert(data.message);
+            router.push('/login');
+          },
+          onError: (error, variables, context) => {
+            console.log(error);
 
-    // Clear fields after submit
-    setName('');
-    setEmail('');
-    setPassword('');
-    setSpecialization('');
-  };
+            alert(error.message);
+          },
+        }
+      );
+    },
+  });
 
-  // For Box
+  // Form Box
   return (
     <section className="flex flex-row">
       {/* form */}
-      <form onSubmit={handleSubmit} className="flex flex-col w-fit h-fit">
+      <form
+        onSubmit={formik.handleSubmit}
+        className="flex flex-col w-fit h-fit"
+      >
         <p className="text-4xl font-semibold pb-10">Sign Up:</p>
         {/* input title box */}
         {/* Name */}
@@ -67,60 +61,86 @@ const SignupDoctorView = () => {
           <p>:</p>
         </div>
         <input
-          className="w-[485px] p-2 border-gray-200 border-1 rounded-[5px] mb-10"
+          id="name"
           type="text"
-          required
-          placeholder="eg. john@ex.com"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          placeholder="eg. John Doe"
+          className="w-[485px] p-2 border-gray-200 border-1 rounded-[5px]"
+          {...formik.getFieldProps('name')}
         />
+        {formik.touched.name && formik.errors.name && (
+          <p className="mt-1 text-sm text-red-600">{formik.errors.name}</p>
+        )}
         {/* Email */}
-        <div className="flex flex-row items-center justify-start gap-1 mb-2.5">
+        <div className="flex flex-row items-center justify-start gap-1  mt-10 mb-2.5">
           <p className="">Email</p>
           <p className="text-red-500">*</p>
           <p>:</p>
         </div>
         <input
-          className="w-[485px] p-2 border-gray-200 border-1 rounded-[5px] mb-10"
+          id="email"
           type="email"
-          required
           placeholder="eg. john@ex.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          className="w-[485px] p-2 border-gray-200 border-1 rounded-[5px]"
+          {...formik.getFieldProps('email')}
         />
+        {formik.touched.email && formik.errors.email && (
+          <p className="mt-1 text-sm text-red-600">{formik.errors.email}</p>
+        )}
         {/* Specialization */}
-        <div className="flex flex-row items-center justify-start gap-1 mb-2.5">
+        <div className="flex flex-row items-center justify-start gap-1  mt-10 mb-2.5">
           <p className="">Specialization</p>
           <p className="text-red-500">*</p>
           <p>:</p>
         </div>
-        <Dropdown onChange={getSpecialization} />
+        {/* Dropdown  */}
+        <select
+          id="specialization"
+          className="w-[485px] p-2 border-gray-200 border-1 rounded-[5px] text-gray-600"
+          {...formik.getFieldProps('specialization')}
+        >
+          <option value="" disabled>
+            Select specialization
+          </option>
+          <option value="orthopedics">Orthopedics</option>
+          <option value="dermatology">Dermatology</option>
+          <option value="pediatrics">Pediatrics</option>
+          <option value="general surgery">General Surgery</option>
+          <option value="radiology">Radiology</option>
+        </select>
+        {formik.touched.specialization && formik.errors.specialization && (
+          <p className="mt-1 text-sm text-red-600">
+            {formik.errors.specialization}
+          </p>
+        )}
         {/* Password */}
-        <div className="flex flex-row items-center justify-start gap-1 mb-2.5">
+        <div className="flex flex-row items-center justify-start gap-1 mt-10 mb-2.5">
           <p className="">Password</p>
           <p className="text-red-500">*</p>
           <p>:</p>
         </div>
         <input
-          className="w-[485px] p-2 mb-5  border-gray-200 border-1 rounded-[5px]"
+          id="password"
           type="password"
-          required
           placeholder="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        ></input>
+          className="w-[485px] p-2 mb-1   border-gray-200 border-1 rounded-[5px]"
+          {...formik.getFieldProps('password')}
+        />
+        {formik.touched.password && formik.errors.password && (
+          <p className="mt-1 text-sm text-red-600">{formik.errors.password}</p>
+        )}
 
-        <div className="text-end">
+        {/* <div className="text-end">
           <a
-            href="#"
+            href="/signup-doctor"
             className="text-[var(--primary-color)] text-xl hover:text-blue-600"
           >
             Forgot Password?
           </a>
-        </div>
+        </div> */}
         <div className="text-center">
           <button
             type="submit"
+            disabled={isPending}
             className="bg-[var(--primary-color)] text-white w-[485px] h-[60px] px-1 py-5 border-[var(--primary-color)] rounded-xl cursor-pointer mt-7.5 hover:bg-blue-600"
           >
             Continue

@@ -1,21 +1,23 @@
 import axiosInstance from '@/utils/axios';
-import { QueryClient } from '@tanstack/react-query';
+
 import { useQuery } from '@tanstack/react-query';
+import User from '@/constants/user';
+import Doctor from '@/constants/doctor';
 
-// const fetchDoctors = async () => {
-//   const response = await axiosInstance.get('/users/all-doctors');
-//   return response.data;
-// };
+interface ResponseProfile {
+  user?: User;
+  doctor?: Doctor;
+  message: string;
+}
 
-// const queryClient = new QueryClient();
-// const {
-//   data: doctors = [],
-//   error,
-//   isPending,
-// } = useQuery({
-//   queryKey: ['doctors'],
-//   queryFn: fetchDoctors,
-// });
+export const getDoctor = async (): Promise<ResponseProfile> => {
+  const response = await axiosInstance.get('/users/me');
+  return response.data;
+};
 
-// if (isPending) return <Spinne />;
-// if (error) return <ErrorPage />;
+export const useGetDoctor = () => {
+  return useQuery({
+    queryKey: ['doctor-profile'],
+    queryFn: getDoctor,
+  });
+};

@@ -1,6 +1,9 @@
 import axiosInstance from '@/utils/axios';
 import { useMutation } from '@tanstack/react-query';
+import Doctor from '@/constants/doctor';
+import User from '@/constants/user';
 
+// Body JSON structure
 interface SignupPayload {
   name: string;
   email: string;
@@ -11,31 +14,11 @@ interface SignupPayload {
   rating: number;
   yearsOfExperience: number;
 }
-
+// API response JSON structure
 interface SignupResponse {
   user?: User;
-  doctor: Doctor;
+  doctor?: Doctor;
   message: string;
-}
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string | null;
-}
-
-interface Doctor {
-  id: number;
-  specialization: string;
-  yearsOfExp: number;
-  rating: number;
-  introduction: string;
-  user_id: number;
 }
 
 export const signupDoctor = async (

@@ -1,60 +1,45 @@
 'use client';
-import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLogin } from '@/services/mutations/login.mutation';
 import { setCookie } from 'cookies-next';
 import { useFormik } from 'formik';
 import LoginSchema from '@/utils/login-schema';
+import { useGetDoctor } from '@/services/queries/doctor.query';
 
 const LoginView = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const router = useRouter();
-  const role = 'doctor';
   const { mutateAsync, isPending } = useLogin();
+  const { data, error, status } = useGetDoctor();
 
+  // using form-state for values
   const formik = useFormik({
     initialValues: { email: '', password: '' },
     validationSchema: LoginSchema,
-    onSubmit: (values, { resetForm }) => {
-      console.log('✅ Submitted:', values);
-      resetForm(); // clear after submit
+    onSubmit: async (values, { resetForm }) => {
+      // API call: sends data to server
+      await mutateAsync(values, {
+        onSuccess: (data, variables, context) => {
+          setCookie('accessToken', data.access_token);
+          resetForm(); // clear after submit
+          alert(data.message);
+        },
+        onError: (error, variables, context) => {
+          alert(error?.message);
+        },
+      });
+      // gets data of logged in user and reroutes accordingly
+      if (data) {
+        const role = data?.user?.role;
+        if (role === 'doctor') {
+          router.push('/doctor-home');
+        } else if (role === 'patient') {
+          router.push('/patient-home');
+        }
+      } else console.log(error);
     },
   });
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   const user = { email, password };
-
-  //   // API call:
-  //   await mutateAsync(
-  //     {
-  //       email,
-  //       password,
-  //     },
-  //     {
-  //       onSuccess: (data, variables, context) => {
-  //         setCookie('accessToken', data.access_token);
-  //         alert(data.message);
-  //         // TODO: set user
-  //       },
-  //       onError: (error, variables, context) => {
-  //         alert(error?.message);
-  //       },
-  //     }
-  //   );
-
-  //   setEmail('');
-  //   setPassword('');
-
-  //   if (role === 'doctor') {
-  //     router.push('/doctor-home');
-  //   }
-  //   router.push('/patient-home');
-  // };
-
   // Form Box
-
   return (
     <section id="inner box" className="flex flex-row">
       {/* form */}
@@ -70,14 +55,11 @@ const LoginView = () => {
           <p>:</p>
         </div>
         <input
-          className="w-[485px] p-2 border-gray-200 border-1 rounded-[5px]"
           id="email"
           type="email"
-          {...formik.getFieldProps('email')}
-          // required
           placeholder="eg. john@ex.com"
-          // value={email}
-          // onChange={(e) => setEmail(e.target.value)}
+          className="w-[485px] p-2 border-gray-200 border-1 rounded-[5px]"
+          {...formik.getFieldProps('email')}
         />
         {formik.touched.email && formik.errors.email && (
           <p className="mt-1 text-sm text-red-600">{formik.errors.email}</p>
@@ -88,10 +70,10 @@ const LoginView = () => {
           <p>:</p>
         </div>
         <input
-          className="w-[485px] p-2  border-gray-200 border-1 rounded-[5px]"
-          type="password"
           id="password"
+          type="password"
           placeholder="Enter Password"
+          className="w-[485px] p-2  border-gray-200 border-1 rounded-[5px]"
           {...formik.getFieldProps('password')}
         />
         {formik.touched.password && formik.errors.password && (
@@ -106,12 +88,16 @@ const LoginView = () => {
           </a>
         </div>
         <div className="text-center">
-          <button className="bg-[var(--primary-color)] text-white w-[485px] h-[60px] px-1 py-5 border-[var(--primary-color)] rounded-xl cursor-pointer mt-7.5 hover:bg-blue-600">
+          <button
+            type="submit"
+            disabled={isPending}
+            className="bg-[var(--primary-color)] text-white w-[485px] h-[60px] px-1 py-5 border-[var(--primary-color)] rounded-xl cursor-pointer mt-7.5 hover:bg-blue-600"
+          >
             Continue
           </button>
         </div>
         <p className="text-xl text-[#999] text-center">
-          Don't have an account?{' '}
+          Don't have an account?
           <a
             href="#"
             className="text-[var(--primary-color)] text-xl hover:text-blue-600"

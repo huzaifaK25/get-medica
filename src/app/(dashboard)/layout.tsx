@@ -22,13 +22,13 @@ const HomeLayout: React.FC<Props> = ({ children }) => {
           {role === 'doctor' ? (
             <>
               <Link
-                href={'/doctor-home'}
+                href={'/doctor-dashboard'}
                 className="flex flex-row items-center justify-start gap-1 rounded-[8px] bg-white text-[var(--primary-color)] font-semibold w-[80%] pt-1 pb-1 pr-1 pl-1"
               >
                 <SvgAvailability /> Set Availability
               </Link>
               <Link
-                href={'/doctor-home/appointment'}
+                href={'/doctor-dashboard/appointment'}
                 className="flex flex-row items-center justify-start gap-1 rounded-[8px] bg-white text-[var(--primary-color)] font-semibold w-[80%] pt-1 pb-1 pr-1 pl-1"
               >
                 <SvgAppointment />
@@ -38,13 +38,13 @@ const HomeLayout: React.FC<Props> = ({ children }) => {
           ) : (
             <>
               <Link
-                href={'/patient-home'}
+                href={'/patient-dashboard'}
                 className="flex flex-row items-center justify-start gap-1 rounded-[8px] bg-white text-[var(--primary-color)] font-semibold w-[80%] pt-1 pb-1 pr-1 pl-1"
               >
                 <SvgDoctor /> Doctor List
               </Link>
               <Link
-                href={'/patient-home/appointment'}
+                href={'/patient-dashboard/appointment'}
                 className="flex flex-row items-center justify-start gap-1 rounded-[8px] bg-white text-[var(--primary-color)] font-semibold w-[80%] pt-1 pb-1 pr-1 pl-1"
               >
                 <SvgAppointment />

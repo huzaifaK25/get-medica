@@ -5,6 +5,7 @@ import { setCookie } from 'cookies-next';
 import { useFormik } from 'formik';
 import LoginSchema from '@/utils/login-schema';
 import { useGetDoctor } from '@/services/queries/doctor.query';
+import { ROUTES } from '@/constants/route';
 
 const LoginView = () => {
   const router = useRouter();
@@ -31,9 +32,9 @@ const LoginView = () => {
       if (data) {
         const role = data?.user?.role;
         if (role === 'doctor') {
-          router.push('/doctor-home');
+          router.push(ROUTES.DASHBOARD.DOCTOR_DASH);
         } else if (role === 'patient') {
-          router.push('/patient-home');
+          router.push(ROUTES.DASHBOARD.PATIENT_DASH);
         }
       } else console.log(error);
     },
@@ -101,7 +102,7 @@ const LoginView = () => {
           <a
             href="#"
             className="text-[var(--primary-color)] text-xl hover:text-blue-600"
-            onClick={() => router.push('/')}
+            onClick={() => router.push(ROUTES.HOME)}
           >
             Sign Up
           </a>

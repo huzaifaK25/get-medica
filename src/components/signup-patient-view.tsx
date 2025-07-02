@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import SignupPatientSchema from '@/utils/signup-patient-schema';
 import { useSignupPatient } from '@/services/mutations/signup-patient.mutation';
+import { ROUTES } from '@/constants/route';
 
 const SignupPatientView = () => {
   const role = 'patient';
@@ -26,7 +27,7 @@ const SignupPatientView = () => {
           onSuccess(data, variables, context) {
             resetForm();
             alert(data.message);
-            router.push('/login');
+            router.push(ROUTES.AUTH.LOGIN);
           },
           onError(error, variables, context) {
             console.log(error);
@@ -106,7 +107,7 @@ const SignupPatientView = () => {
           <a
             href="#"
             className="text-[var(--primary-color)] text-xl hover:text-blue-600 pl-2"
-            onClick={() => router.push('/login')}
+            onClick={() => router.push(ROUTES.AUTH.LOGIN)}
           >
             Log in
           </a>

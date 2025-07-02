@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useSignupDoctor } from '@/services/mutations/signup-doctor.mutation';
 import { useFormik } from 'formik';
 import SignupDoctorSchema from '@/utils/signup-doctor-schema';
+import { ROUTES } from '@/constants/route';
 
 const SignupDoctorView = () => {
   const router = useRouter();
@@ -32,7 +33,7 @@ const SignupDoctorView = () => {
           onSuccess: (data, variables, context) => {
             resetForm();
             alert(data.message);
-            router.push('/login');
+            router.push(ROUTES.AUTH.LOGIN);
           },
           onError: (error, variables, context) => {
             console.log(error);
@@ -151,7 +152,7 @@ const SignupDoctorView = () => {
           <a
             href="#"
             className="text-[var(--primary-color)] text-xl hover:text-blue-600 pl-2"
-            onClick={() => router.push('/login')}
+            onClick={() => router.push(ROUTES.AUTH.LOGIN)}
           >
             Log in
           </a>

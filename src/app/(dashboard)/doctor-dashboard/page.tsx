@@ -9,22 +9,24 @@ const DoctorHome = () => {
       <div className="text-black font-semibold text-3xl mb-8">
         Select Your Weekly Availability
       </div>
-      {/* subheading */}
-      <div className="flex flex-row text-black font-semibold text-xl mb-5">
-        <div className=" ml-31">Select Day</div>
-        <div className=" ml-26">Select Time</div>
-      </div>
+
       {/* Box*/}
-      <div className="flex flex-col gap-10 mr-10">
+      <div className="flex flex-col gap-10">
+        {/* subheading */}
+        <div className="flex flex-row text-black font-semibold text-xl gap-10 lg:gap-20">
+          <div className="w-5 h-5"></div>
+          <div className="w-[82px] md:w-[140px]">Select Day</div>
+          <div className="grow-1">Select Time</div>
+        </div>
         {/* row - sunday */}
-        <div className="flex flex-row items-center w-106 justify-between ">
+        <div className="flex flex-row items-center gap-10 lg:gap-20 text-[15px] ">
           <input
             className="border-1 border-gray-500 h-5 w-5"
             type="checkbox"
             disabled
           />
-          <p className="w-25  text-gray-400">Sunday</p>
-          <p className="w-25  text-gray-400">Unavailable</p>
+          <p className="w-[82px] md:w-[140px] text-gray-400">Sunday</p>
+          <p className="grow-1  text-gray-400">Unavailable</p>
         </div>
         {/* row - monday  */}
         <TableRow day="Monday" />
@@ -37,18 +39,18 @@ const DoctorHome = () => {
         {/* row - friday */}
         <TableRow day="Friday" />
         {/* row - saturday */}
-        <div className="flex flex-row items-center w-106 justify-between">
+        <div className="flex flex-row items-center gap-10 lg:gap-20 text-[15px]">
           <input
             className="border-1 border-gray-500 h-5 w-5"
             type="checkbox"
             disabled
           />
-          <p className="w-25  text-gray-400">Saturday</p>
-          <p className="w-25  text-gray-400">Unavailable</p>
+          <p className="w-[82px] md:w-[140px] text-gray-400">Saturday</p>
+          <p className="grow-1  text-gray-400">Unavailable</p>
         </div>
       </div>
       {/* button */}
-      <div className="flex justify-end mt-10 mr-10 gap-2">
+      <div className="flex justify-end mt-10 gap-2">
         <button className="bg-primary text-white px-15 py-3 rounded-[5px] cursor-pointer">
           Save
         </button>

@@ -3,8 +3,6 @@ import axios from 'axios';
 import { deleteCookie, getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 
-const router = useRouter();
-
 // axios instance created
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:8000',
@@ -25,6 +23,7 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   // error handlin function
   async (error) => {
+    const router = useRouter();
     // gets http status code
     const status = error.response ? error.response.status : null;
 

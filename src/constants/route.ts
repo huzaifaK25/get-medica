@@ -12,4 +12,7 @@ export const ROUTES = {
     PATIENT_APPT: '/patient-dashboard/appointment',
     PATIENT_BOOK_APPT: '/patient-dashboard/book-appointment',
   },
+  APPOINTMENTS: {
+    CREATE: '/appointments/create',
+  },
 };

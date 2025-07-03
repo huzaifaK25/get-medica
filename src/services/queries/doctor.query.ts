@@ -10,14 +10,28 @@ interface ResponseProfile {
   message: string;
 }
 
-export const getDoctor = async (): Promise<ResponseProfile> => {
+export const getUser = async (): Promise<ResponseProfile> => {
   const response = await axiosInstance.get('/users/me');
   return response.data;
 };
 
-export const useGetDoctor = () => {
+export const getDoctorProfile = async (
+  id: number
+): Promise<ResponseProfile> => {
+  const response = await axiosInstance.get(`/users/${id}`);
+  return response.data;
+};
+
+export const useGetUser = () => {
   return useQuery({
     queryKey: ['doctor-profile'],
-    queryFn: getDoctor,
+    queryFn: getUser,
+  });
+};
+
+export const useGetDoctorProfile = (id: number) => {
+  return useQuery({
+    queryKey: ['doctor', id],
+    queryFn: () => getDoctorProfile(id),
   });
 };

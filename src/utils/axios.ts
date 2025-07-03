@@ -26,7 +26,6 @@ axiosInstance.interceptors.response.use(
     const router = useRouter();
     // gets http status code
     const status = error.response ? error.response.status : null;
-
     if (status === 401) {
       // Handle unauthorized access
       await deleteCookie('accessToken', { path: '/' });

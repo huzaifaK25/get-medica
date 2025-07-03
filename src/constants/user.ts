@@ -1,3 +1,6 @@
+import Doctor from './doctor';
+import Patient from './patient';
+
 interface User {
   id: number;
   name: string;
@@ -7,6 +10,8 @@ interface User {
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
+  doctor_detail?: Doctor;
+  patient_detail?: Patient;
 }
 
 export default User;

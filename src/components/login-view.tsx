@@ -4,13 +4,13 @@ import { useLogin } from '@/services/mutations/login.mutation';
 import { setCookie } from 'cookies-next';
 import { useFormik } from 'formik';
 import LoginSchema from '@/utils/login-schema';
-import { useGetDoctor } from '@/services/queries/doctor.query';
+import { useGetUser } from '@/services/queries/doctor.query';
 import { ROUTES } from '@/constants/route';
 
 const LoginView = () => {
   const router = useRouter();
   const { mutateAsync, isPending } = useLogin();
-  const { data, error, status } = useGetDoctor();
+  const { data, error, status } = useGetUser();
 
   // using form-state for values
   const formik = useFormik({

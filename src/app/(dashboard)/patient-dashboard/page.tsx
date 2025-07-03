@@ -7,6 +7,7 @@ import axiosInstance from '@/utils/axios';
 import Spinner from '@/app/loading';
 import ErrorPage from '@/app/error';
 import { QueryClient } from '@tanstack/react-query';
+import { ROUTES } from '@/constants/route';
 
 const fetchDoctors = async () => {
   const response = await axiosInstance.get('/users/all-doctors');
@@ -29,7 +30,6 @@ const PatientHome = () => {
   if (error) return <ErrorPage />;
 
   const doctorsList = doctors.doctors;
-  console.log(doctorsList);
 
   // invalidate query example
   function action() {
@@ -84,7 +84,9 @@ const PatientHome = () => {
                 <div>{doctor.doctor_detail.rating} star rating</div>
               </div>
               <div className="flex items-end ">
-                <Link href={'/patient-home/book-appointment'}>
+                <Link
+                  href={`${ROUTES.DASHBOARD.PATIENT_BOOK_APPT}/${doctor.id}`}
+                >
                   <button className=" bg-blue-100 font-semibold text-primary text-[20px] rounded-full w-10 h-10 hover:border-2 border-primary cursor-pointer">
                     {'->'}
                   </button>

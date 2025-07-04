@@ -3,6 +3,7 @@ import axiosInstance from '@/utils/axios';
 import { useQuery } from '@tanstack/react-query';
 import User from '@/constants/user';
 import Doctor from '@/constants/doctor';
+import { ROUTES } from '@/constants/route';
 
 interface ResponseProfile {
   user?: User;
@@ -11,7 +12,7 @@ interface ResponseProfile {
 }
 
 export const getUser = async (): Promise<ResponseProfile> => {
-  const response = await axiosInstance.get('/users/me');
+  const response = await axiosInstance.get(ROUTES.USER.ME);
   return response.data;
 };
 

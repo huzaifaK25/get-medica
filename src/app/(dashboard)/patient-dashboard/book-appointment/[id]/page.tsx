@@ -11,28 +11,31 @@ import moment from 'moment';
 import { useCreateAppointment } from '@/services/mutations/create-appointment.mutation';
 import { date } from 'yup';
 
+let active = false;
+
 const BookAppointment = () => {
-  // doctor id from params
+  // user id from params
   const params = useParams<{ id: string }>();
   const id = +params.id;
-  // fetch doctor to display on screen
+
+  // fetch doctor to display on screen from id param
   const { data, error } = useGetDoctorProfile(id);
-  if (!data) return;
-  // fetch user for user id
+
+  // fetch user for id
   const user = useGetUser();
-  // console.log('USER: ', user.data?.user?.id);
+  console.log('USER: ', user.data?.user?.id);
 
   // TODO: get from backend rn hardcoded
   const availability = ['Mon', 'Wed', 'Fri'];
 
   const doctor = {
-    id: data.user?.id,
-    name: data.user?.name,
-    specialization: data.user?.doctor_detail?.specialization,
+    id: data?.user?.id,
+    name: data?.user?.name,
+    specialization: data?.user?.doctor_detail?.specialization,
     availability,
-    experience: data.user?.doctor_detail?.yearsOfExp,
-    rating: data.user?.doctor_detail?.rating,
-    introduction: data.user?.doctor_detail?.introduction,
+    experience: data?.user?.doctor_detail?.yearsOfExp,
+    rating: data?.user?.doctor_detail?.rating,
+    introduction: data?.user?.doctor_detail?.introduction,
   };
 
   const [appointmentTimings, setAppointmentTimings] = useState<
@@ -100,8 +103,12 @@ const BookAppointment = () => {
         },
       },
       {
-        onSuccess(data, variables, context) {},
-        onError(error, variables, context) {},
+        onSuccess(data, variables, context) {
+          alert('Appointment has been created successfully!');
+        },
+        onError(error, variables, context) {
+          alert('Error creating appointment, try again.');
+        },
       }
     );
   };
@@ -173,14 +180,15 @@ const BookAppointment = () => {
           <div className="grid grid-cols-6 gap-3 mb-8">
             {selectedDay.timings.map((t, idx) => {
               const time12 = moment(t, 'HH:mm:ss').format('hh:mm A');
-              const active = false;
+
               return (
                 <button
                   key={`${selectedDay.id}-${idx}`}
                   type="button"
                   onClick={() => {
+                    console.log('click');
+
                     setTime(time12);
-                    !active;
                   }}
                   className={` rounded-[5px] text-[15px] px-14 py-3 text-center cursor-pointer
                               ${

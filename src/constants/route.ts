@@ -1,5 +1,8 @@
 export const ROUTES = {
   HOME: '/',
+  USER: {
+    ME: '/users/me',
+  },
   AUTH: {
     LOGIN: '/login',
     DOCTOR_SIGNUP: '/signup-doctor',
@@ -14,5 +17,8 @@ export const ROUTES = {
   },
   APPOINTMENTS: {
     CREATE: '/appointments/create',
+  },
+  SCHEDULE: {
+    CREATE: '',
   },
 };

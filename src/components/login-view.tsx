@@ -29,16 +29,19 @@ const LoginView = () => {
         },
       });
       // gets data of logged in user and reroutes accordingly
-      if (data) {
-        const role = data?.user?.role;
-        if (role === 'doctor') {
-          router.push(ROUTES.DASHBOARD.DOCTOR_DASH);
-        } else if (role === 'patient') {
-          router.push(ROUTES.DASHBOARD.PATIENT_DASH);
-        }
-      } else console.log(error);
     },
   });
+
+  const routeUser = () => {
+    if (data) {
+      const role = data?.user?.role;
+      if (role === 'doctor') {
+        return router.push(ROUTES.DASHBOARD.DOCTOR_DASH);
+      } else if (role === 'patient') {
+        return router.push(ROUTES.DASHBOARD.PATIENT_DASH);
+      }
+    } else console.log(error);
+  };
 
   // Form Box
   return (
@@ -92,6 +95,7 @@ const LoginView = () => {
           <button
             type="submit"
             disabled={isPending}
+            onClick={routeUser}
             className="bg-[var(--primary-color)] text-white w-[485px] h-[60px] px-1 py-5 border-[var(--primary-color)] rounded-xl cursor-pointer mt-7.5 hover:bg-blue-600"
           >
             Continue

@@ -1,8 +1,38 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import TableRow from '../../../components/table.row';
+import { useGetUser } from '@/services/queries/doctor.query';
+import { useSetSchedule } from '@/services/mutations/set-schedule.mutation';
 
+// SET SCHEDULE PAGE
 const DoctorHome = () => {
+  // get logged in doctor profile
+  const { data, error, status } = useGetUser();
+  console.log(data?.user?.id);
+
+  // set schedule
+  const { mutateAsync, isPending } = useSetSchedule();
+
+  const setDoctorSchedule = async () => {
+    // post
+    // await mutateAsync(
+    //   {
+    //     doctor_id: 0,
+    //     days: [],
+    //     timings: [],
+    //   },
+    //   {
+    //     onSuccess(data, variables, context) {},
+    //     onError(error, variables, context) {},
+    //   }
+    // );
+  };
+
+  // TODO:
+  // useState to get input from UI
+  // set schedule mutation , backednd API to post schedule to DB schedule table
+  // separate table for days and timings one to many relation of schedule with days/timings
+
   return (
     <div className=" flex flex-col p-6">
       {/* heading */}
@@ -51,7 +81,10 @@ const DoctorHome = () => {
       </div>
       {/* button */}
       <div className="flex justify-end mt-10 gap-2">
-        <button className="bg-primary text-white px-15 py-3 rounded-[5px] cursor-pointer">
+        <button
+          onClick={() => setDoctorSchedule}
+          className="bg-primary text-white px-15 py-3 rounded-[5px] cursor-pointer"
+        >
           Save
         </button>
       </div>

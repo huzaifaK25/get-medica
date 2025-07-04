@@ -1,17 +1,28 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 
 interface Props {
   day: string;
 }
 
 const TableRow: React.FC<Props> = ({ day }) => {
+  // const [checked, setChecked] = useState(false);
+  const [days, setDays] = useState<string[]>([]);
+  // console.log(checked);
+
+  const daysArray = (value: boolean) => {
+    // setChecked(!checked);
+    console.log(value);
+  };
+
   return (
     <div className="flex flex-row items-center gap-10 lg:gap-20 text-[15px]">
       <div className="h-5 w-5">
         <input
+          id="day"
           className="peer border-1 border-gray-500 h-5 w-5"
           type="checkbox"
+          onChange={(e) => daysArray(e.target.checked)}
         />
       </div>
       <p className="w-[82px] md:w-[140px]  peer-checked:text-black text-gray-400">

@@ -1,7 +1,10 @@
 import { ROUTES } from '@/constants/route';
 import axios from 'axios';
 import { deleteCookie, getCookie } from 'cookies-next';
-import { useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
+
+// dont use hook cus it is a server comp
+// const router = useRouter();
 
 // axios instance created
 const axiosInstance = axios.create({
@@ -23,14 +26,13 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   // error handlin function
   async (error) => {
-    const router = useRouter();
     // gets http status code
     const status = error.response ? error.response.status : null;
     if (status === 401) {
       // Handle unauthorized access
       await deleteCookie('accessToken', { path: '/' });
       // redirects to login
-      router.push(ROUTES.AUTH.LOGIN);
+      redirect(ROUTES.AUTH.LOGIN);
     } else if (status === 404) {
       // Handle not found errors
       console.log('ROUTE NOT FOUND');

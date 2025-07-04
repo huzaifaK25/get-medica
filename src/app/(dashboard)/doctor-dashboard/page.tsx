@@ -64,18 +64,48 @@ const DoctorHome = () => {
     //     onError(error, variables, context) {},
     //   }
     // );
+    console.log(availability);
+
     alert('Schedule Set');
   };
 
-  // disables input if check box not select
-  const [fromTime, setFromTime] = useState('');
-  const [toTime, setToTime] = useState('');
-  // adds time to the availability timings array
-  const addTime = (idx: number) => {
-    const updated = [...availability];
-    updated[idx].slots.push({ from: fromTime, to: toTime });
-    setAvailability(updated);
-    console.log(availability);
+  // update the value of ONE input (from / to) in ONE slot
+  const handleSlotChange = (
+    dayIdx: number,
+    slotIdx: number,
+    field: 'from' | 'to',
+    value: string
+  ) => {
+    const clone = [...availability];
+    if (clone[dayIdx].slots.length > 1) {
+      clone[dayIdx].slots[length];
+    }
+    setAvailability((prev) => {
+      const clone = [...prev];
+      clone[dayIdx].slots[slotIdx][field] = value;
+      return clone;
+    });
+  };
+
+  // add an empty row
+  const addEmptySlot = (dayIdx: number) => {
+    setAvailability((prev) => {
+      const clone = [...prev];
+      clone[dayIdx].slots.push({ from: '', to: '' }); // 👈 new blank row
+      return clone;
+    });
+    const clone = [...availability];
+    const indx = clone[dayIdx].slots.length + 1;
+    removeSlot(dayIdx, indx);
+  };
+
+  // remove a row
+  const removeSlot = (dayIdx: number, slotIdx: number) => {
+    setAvailability((prev) => {
+      const clone = [...prev];
+      clone[dayIdx].slots.splice(slotIdx, 1);
+      return clone;
+    });
   };
 
   return (
@@ -117,6 +147,15 @@ const DoctorHome = () => {
                 onChange={(e) => {
                   const updated = [...availability];
                   updated[idx].enabled = e.target.checked;
+                  // adds blank row to array when checkbox is ticked
+                  // empty row eeded because of mapping otherwise shows blank
+                  if (e.target.checked && updated[idx].slots.length === 0) {
+                    updated[idx].slots = [{ from: '', to: '' }];
+                  }
+                  // empties all time slots for that index if check box is unchecked
+                  if (!e.target.checked && updated[idx].slots.length > 0) {
+                    updated[idx].slots = [];
+                  }
                   setAvailability(updated);
                 }}
               />
@@ -124,57 +163,92 @@ const DoctorHome = () => {
             <p className="w-[82px] md:w-[140px]  peer-checked:text-black text-gray-400">
               {day.day}
             </p>
+
             {/* Time inputs */}
-            <div className="flex gap-2 items-center justify-center peer-checked:text-black text-gray-400">
-              <p className="mr-2 ">From:</p>
+            <div className="flex flex-col gap-2 grow">
               {day.enabled ? (
-                <input
-                  className="border-1 border-gray-300 rounded-[5px] px-2 py-1 lg:w-50 "
-                  type="time"
-                  onChange={(e) => setFromTime(e.target.value)}
-                />
+                day.slots.map((slot, slotIdx) => (
+                  <div key={slotIdx} className="flex items-center gap-2">
+                    <span>From:</span>
+                    <input
+                      type="time"
+                      className="border border-gray-300 rounded-[5px] px-2 py-1 lg:w-50"
+                      value={slot.from}
+                      onChange={(e) =>
+                        handleSlotChange(idx, slotIdx, 'from', e.target.value)
+                      }
+                    />
+                    <span>To:</span>
+                    <input
+                      type="time"
+                      className="border border-gray-300 rounded-[5px] px-2 py-1 lg:w-50"
+                      value={slot.to}
+                      onChange={(e) =>
+                        handleSlotChange(idx, slotIdx, 'to', e.target.value)
+                      }
+                    />
+
+                    {/* + is active on the last row only */}
+                    {slotIdx === day.slots.length - 1 ? (
+                      <button
+                        onClick={() => addEmptySlot(idx)}
+                        className="ml-2 bg-primary text-white font-semibold text-xl h-5 w-5 rounded-[4px] flex items-center justify-center pb-[2px] "
+                      >
+                        +
+                      </button>
+                    ) : (
+                      <button
+                        disabled
+                        onClick={() => addEmptySlot(idx)}
+                        className="ml-2 bg-gray-400 text-white font-semibold text-xl h-5 w-5 rounded-[4px] flex items-center justify-center pb-[2px] "
+                      >
+                        +
+                      </button>
+                    )}
+
+                    {/* – is active on every row except the very first */}
+                    {day.slots.length > 1 ? (
+                      <div className="">
+                        <button
+                          onClick={() => removeSlot(idx, slotIdx)}
+                          className="ml-1 bg-white text-black font-semibold text-xl h-5 w-5 border border-gray-500 rounded-[4px] flex items-center justify-center pb-[2px] "
+                        >
+                          -
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="">
+                        <button
+                          disabled
+                          onClick={() => removeSlot(idx, slotIdx)}
+                          className="ml-1 bg-gray-400 text-white font-semibold text-xl h-5 w-5 border border-gray-500 rounded-[4px] flex items-center justify-center pb-[2px] "
+                        >
+                          -
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))
               ) : (
-                <input
-                  className="border-1 border-gray-300 rounded-[5px] px-2 py-1 lg:w-50 "
-                  type="time"
-                  disabled
-                  value={''}
-                />
+                /* day not enabled → show disabled inputs exactly like before */
+                <div className="flex gap-2 items-center text-gray-400">
+                  <span>From:</span>
+                  <input
+                    type="time"
+                    disabled
+                    className="border border-gray-300 rounded-[5px] px-2 py-1 lg:w-50"
+                  />
+                  <span>To:</span>
+                  <input
+                    type="time"
+                    disabled
+                    className="border border-gray-300 rounded-[5px] px-2 py-1 lg:w-50"
+                  />
+                </div>
               )}
-              <p className="mr-2">To:</p>
-              {day.enabled ? (
-                <input
-                  className="border-1 border-gray-300 rounded-[5px] px-2 py-1 lg:w-50 "
-                  type="time"
-                  onChange={(e) => {
-                    setToTime(e.target.value);
-                  }}
-                />
-              ) : (
-                <input
-                  className="border-1 border-gray-300 rounded-[5px] px-2 py-1 lg:w-50 "
-                  type="time"
-                  disabled
-                  value={''}
-                />
-              )}
-            </div>
-            <div className="flex gap-6 md:gap-10 lg:gap-15 xl:gap-20">
-              <button
-                onClick={() => addTime(idx)}
-                className={`${
-                  day.enabled ? 'bg-primary' : 'bg-gray-400'
-                }  text-white font-semibold text-xl h-5 w-5 rounded-[4px] flex items-center justify-center pb-1`}
-              >
-                +
-              </button>
-              <button className="bg-white peer-checked:text-gray-500 text-gray-400 font-semibold text-xl h-5 w-5 border-1 border-gray-500 rounded-[4px] flex items-center justify-center pb-1">
-                -
-              </button>
             </div>
           </div>
         ))}
-
         {/* row - saturday */}
         <div className="flex flex-row items-center gap-10 lg:gap-20 text-[15px]">
           <input

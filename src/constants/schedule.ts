@@ -1,8 +1,7 @@
 interface Schedule {
-  id: number;
-  days: string[];
-  timings: string[];
   doctor_id: number;
+  sched_day: string;
+  time_from: string;
+  time_to: string;
 }
-
 export default Schedule;

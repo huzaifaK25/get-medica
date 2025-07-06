@@ -6,12 +6,15 @@ import { useMutation } from '@tanstack/react-query';
 
 interface SchedulePayload {
   doctor_id: number;
-  availability: DayAvailability;
+  dto: {
+    day: string;
+    timeFrom: string;
+    timeTo: string;
+  };
 }
-
 interface ScheduleResponse {
   message: string;
-  data: Schedule; //FIXME: if type should be SCHEDULE or DAYAVAILABILITY ??
+  schedule: Schedule;
 }
 
 export const setSchedule = async (

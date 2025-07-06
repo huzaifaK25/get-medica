@@ -17,6 +17,7 @@ const DoctorHome = () => {
       day: 'Monday',
       abbr: 'Mon',
       enabled: false,
+
       slots: [],
     },
     {
@@ -24,6 +25,7 @@ const DoctorHome = () => {
       day: 'Tuesday',
       abbr: 'Tue',
       enabled: false,
+
       slots: [],
     },
     {
@@ -31,6 +33,7 @@ const DoctorHome = () => {
       day: 'Wednesday',
       abbr: 'Wed',
       enabled: false,
+
       slots: [],
     },
     {
@@ -38,6 +41,7 @@ const DoctorHome = () => {
       day: 'Thursday',
       abbr: 'Thu',
       enabled: false,
+
       slots: [],
     },
     {
@@ -45,28 +49,35 @@ const DoctorHome = () => {
       day: 'Friday',
       abbr: 'Fri',
       enabled: false,
+
       slots: [],
     },
   ]);
 
-  // post schedule
+  // POST Dr Schedule
   const { mutateAsync, isPending } = useSetSchedule();
-  const setDoctorSchedule = () => {
+  const setDoctorSchedule = async () => {
     // post
-    // await mutateAsync(
-    //   {
-    //     doctor_id: 0,
-    //     days: [],
-    //     timings: [],
-    //   },
-    //   {
-    //     onSuccess(data, variables, context) {},
-    //     onError(error, variables, context) {},
-    //   }
-    // );
-    console.log(availability);
-
-    alert('Schedule Set');
+    await mutateAsync(
+      {
+        doctor_id: 0,
+        dto: {
+          day: availability[0].day,
+          timeFrom: availability[0].slots[0].from,
+          timeTo: availability[0].slots[0].from,
+        },
+      },
+      {
+        onSuccess(data, variables, context) {
+          console.log({ data });
+        },
+        onError(error, variables, context) {
+          console.log(error);
+        },
+      }
+    );
+    // console.log(availability);
+    // alert('Schedule Set');
   };
 
   // update the value of ONE input (from / to) in ONE slot

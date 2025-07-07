@@ -8,7 +8,6 @@ import { DayAvailability } from '@/constants/availability';
 const DoctorHome = () => {
   // get logged in doctor profile
   const { data, error, status } = useGetUser();
-  // console.log(data?.user?.id);
 
   // get availabilty from backend
   const [availability, setAvailability] = useState<DayAvailability[]>([
@@ -57,27 +56,48 @@ const DoctorHome = () => {
   // POST Dr Schedule
   const { mutateAsync, isPending } = useSetSchedule();
   const setDoctorSchedule = async () => {
-    // post
-    await mutateAsync(
-      {
-        doctor_id: 0,
-        dto: {
-          day: availability[0].day,
-          timeFrom: availability[0].slots[0].from,
-          timeTo: availability[0].slots[0].from,
-        },
-      },
-      {
-        onSuccess(data, variables, context) {
-          console.log(data);
-        },
-        onError(error, variables, context) {
-          console.log(error);
-        },
+    try {
+      console.log('POSTING');
+
+      // doctor id of logged in user
+      const doctorId = data?.user?.id;
+      if (!doctorId)
+        return () => {
+          throw new Error('Doctor ID undefined');
+        };
+      console.log('Doc ID:', doctorId);
+
+      // loops over each day
+      for (const day of availability) {
+        if (!day.enabled || day.slots.length === 0) continue; // nothing to post
+
+        // loops over each slot in day
+        for (const slot of day.slots) {
+          const payload = {
+            doctor_id: doctorId,
+            dto: {
+              sched_day: day.day, // day name
+              time_from: `${slot.from}:00`, // convert to HH:MM:SS
+              time_to: `${slot.to}:00`,
+            },
+          };
+
+          await mutateAsync(payload, {
+            onSuccess() {
+              console.log('Success Save', payload);
+            },
+            onError(error) {
+              console.error('Failed Save', payload, error);
+            },
+          });
+        }
       }
-    );
-    // console.log(availability);
-    // alert('Schedule Set');
+
+      alert('Schedule created');
+    } catch (error) {
+      alert('Something went wrong');
+      console.error(error);
+    }
   };
 
   // update the value of ONE input (from / to) in ONE slot
@@ -92,9 +112,21 @@ const DoctorHome = () => {
       clone[dayIdx].slots[length];
     }
     setAvailability((prev) => {
-      const clone = [...prev];
-      clone[dayIdx].slots[slotIdx][field] = value;
-      return clone;
+      const clone = [...prev]; // copy top‑level array
+
+      // copy the slots array for that day
+      const dayCopy = { ...clone[dayIdx] };
+      const slotsCopy = [...dayCopy.slots];
+
+      // copy the slot you’re editing
+      const slotCopy = { ...slotsCopy[slotIdx], [field]: value };
+      slotsCopy[slotIdx] = slotCopy;
+
+      // stitch it all back together
+      dayCopy.slots = slotsCopy;
+      clone[dayIdx] = dayCopy;
+
+      return clone; // new immutable state
     });
   };
 
@@ -274,6 +306,7 @@ const DoctorHome = () => {
       {/* button */}
       <div className="flex justify-end mt-10 gap-2">
         <button
+          disabled={isPending}
           onClick={() => setDoctorSchedule()}
           className="bg-primary text-white px-15 py-3 rounded-[5px] cursor-pointer"
         >

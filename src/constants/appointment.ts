@@ -1,7 +1,5 @@
-import Doctor from './doctor';
-import Patient from './patient';
-
 interface Appointment {
+  [x: string]: any;
   id: number;
   appt_date: string;
   appt_time: string;
@@ -10,8 +8,6 @@ interface Appointment {
   created_at: string;
   updated_at: string;
   deleted_at: null;
-  doctor_detail: Doctor;
-  patient_detail: Patient;
 }
 
 export default Appointment;

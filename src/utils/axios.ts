@@ -24,12 +24,13 @@ axiosInstance.interceptors.request.use((config) => {
 // interceptor defined on axios instance
 axiosInstance.interceptors.response.use(
   (response) => response,
-  // error handlin function
+  // error handling function
   async (error) => {
     // gets http status code
     const status = error.response ? error.response.status : null;
     if (status === 401) {
       // Handle unauthorized access
+      console.log('UNAUTHORIZED USER');
       await deleteCookie('accessToken', { path: '/' });
       // redirects to login
       redirect(ROUTES.AUTH.LOGIN);

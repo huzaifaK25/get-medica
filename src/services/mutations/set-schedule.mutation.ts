@@ -1,4 +1,3 @@
-import { DayAvailability } from '@/constants/availability';
 import { ROUTES } from '@/constants/route';
 import Schedule from '@/constants/schedule';
 import axiosInstance from '@/utils/axios';
@@ -7,9 +6,9 @@ import { useMutation } from '@tanstack/react-query';
 interface SchedulePayload {
   doctor_id: number;
   dto: {
-    day: string;
-    timeFrom: string;
-    timeTo: string;
+    sched_day: string;
+    time_from: string;
+    time_to: string;
   };
 }
 interface ScheduleResponse {

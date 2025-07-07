@@ -69,7 +69,7 @@ const DoctorHome = () => {
       },
       {
         onSuccess(data, variables, context) {
-          console.log({ data });
+          console.log(data);
         },
         onError(error, variables, context) {
           console.log(error);

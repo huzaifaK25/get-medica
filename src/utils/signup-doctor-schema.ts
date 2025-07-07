@@ -7,7 +7,7 @@ const SignupDoctorSchema = Yup.object({
     .required('Email is required'),
   password: Yup.string()
     .min(6, 'Must be at least 6 characters')
-    .required('Password is requird'),
+    .required('Password is required'),
   specialization: Yup.string().required('Specialization is required'),
 });
 

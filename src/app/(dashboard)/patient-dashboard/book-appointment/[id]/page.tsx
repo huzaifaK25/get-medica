@@ -9,7 +9,6 @@ import {
 import { getWeekDays } from '@/utils/weekdays';
 import moment from 'moment';
 import { useCreateAppointment } from '@/services/mutations/create-appointment.mutation';
-import { date } from 'yup';
 
 let active = false;
 

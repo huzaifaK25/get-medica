@@ -1,4 +1,5 @@
 'use client';
+import Spinner from '@/app/loading';
 import type Appointment from '@/constants/appointment';
 import {
   useGetAppointments,
@@ -6,50 +7,41 @@ import {
 } from '@/services/queries/doctor.query';
 import React from 'react';
 import { FiUser } from 'react-icons/fi';
+import { getWeekDays } from '@/utils/weekdays';
 
 // HELPER: generates weekdays - param todays date
-function getWeekDays(start = new Date()) {
-  const week = [];
-  // for 7 days of the week
-  for (let i = 0; i < 7; i++) {
-    const date = new Date(start);
-    // increments date by one day
-    date.setDate(start.getDate() + i);
-    // creates obj of date, day and id and pushes in to array
-    week.push({
-      id: i,
-      dayName: date.toLocaleDateString('en-US', { weekday: 'short' }), // e.g. "Thursday"
-      dayDate: String(date.getDate()).padStart(2, '0'), // e.g. "03"
-    });
-  }
-  return week;
-}
+// function getWeekDays(start = new Date()) {
+//   const week = [];
+//   // for 7 days of the week
+//   for (let i = 0; i < 7; i++) {
+//     const date = new Date(start);
+//     // increments date by one day
+//     date.setDate(start.getDate() + i);
+//     // creates obj of date, day and id and pushes in to array
+//     week.push({
+//       id: i,
+//       dayName: date.toLocaleDateString('en-US', { weekday: 'short' }), // e.g. "Thursday"
+//       dayDate: String(date.getDate()).padStart(2, '0'), // e.g. "03"
+//     });
+//   }
+//   return week;
+// }
 
 const Appointment = () => {
   // get logged in doctor profile
   const { data, error, status } = useGetUser();
-  const id = data?.user?.doctor_detail?.id;
-  if (!id)
-    return () => {
-      throw new Error('Doctor ID Undefined');
-    };
+  const id = data?.user?.id ?? 0;
+  console.log(id);
+
   // gets appointments from backend
-  const appts = useGetAppointments(id); // FIXME: id not accurate
+  const appts = useGetAppointments(id);
   const appointments = appts.data?.appts;
+
   //gets the following week from todays date
-  const today = new Date('2025-07-02');
+  const today = new Date();
   const week = getWeekDays(today);
 
-  // TODO: need patient details for each appointment (modify backend)
-
-  if (!id)
-    return () => {
-      throw new Error('Doctor ID Undefined');
-    };
-  if (!appointments)
-    return () => {
-      throw new Error('');
-    };
+  if (!appointments) return <Spinner />;
 
   return (
     <div className="p-6 flex flex-col">
@@ -95,7 +87,7 @@ const Appointment = () => {
               <div className="bg-[var(--primary-color)] w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ease-in-out">
                 <FiUser className="text-white w-6 h-6 " />
               </div>
-              <div className="font-bold text-xl">{'Huzaifa Kashif'}</div>{' '}
+              <div className="font-bold text-xl">{'Huzaifa Kashif'}</div>
               {/* FIXME: patient name */}
             </div>
             <div>

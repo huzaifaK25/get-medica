@@ -30,14 +30,14 @@ export default async function middleware(req: NextRequest) {
   // gets cookie value
   const cookie = await getCookie('accessToken', { cookies });
 
-  //   // Redirect to /login if user not authenticated
-  //   if (isProtected && !cookie) {
-  //     return res.redirect(new URL(ROUTES.AUTH.LOGIN, req.nextUrl));
-  //   }
-  //   // Redirect to /dashboard if user authenticated
-  //   if (isPublic && cookie && !req.nextUrl.pathname.includes('dashboard')) {
-  //     return res.redirect(new URL(ROUTES.DASHBOARD.DOCTOR_DASH, req.nextUrl));
-  //   }
-  //   // middleware next()
+  // Redirect to /login if user not authenticated
+  if (isProtected && !cookie) {
+    return res.redirect(new URL(ROUTES.AUTH.LOGIN, req.nextUrl));
+  }
+  // Redirect to /dashboard if user authenticated
+  if (isPublic && cookie && !req.nextUrl.pathname.includes('dashboard')) {
+    return res.redirect(new URL(ROUTES.DASHBOARD.DOCTOR_DASH, req.nextUrl)); //FIXME:
+  }
+  // middleware next function
   return res.next();
 }

@@ -1,3 +1,4 @@
+import User from '@/constants/user';
 import axiosInstance from '@/utils/axios';
 import { useMutation } from '@tanstack/react-query';
 
@@ -7,10 +8,7 @@ interface LoginPayload {
 }
 
 interface LoginResponse {
-  user?: {
-    id: string;
-    email: string;
-  };
+  user?: User;
   message: string;
   access_token: string;
 }

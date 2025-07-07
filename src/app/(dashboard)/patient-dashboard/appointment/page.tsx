@@ -1,4 +1,5 @@
 'use client';
+import Spinner from '@/app/loading';
 import type Appointment from '@/constants/appointment';
 import {
   useGetPatientAppointments,
@@ -9,12 +10,15 @@ import { FiUser } from 'react-icons/fi';
 
 const Appointment = () => {
   // get logged in  profile
-  const { data, error, status } = useGetUser(); // FIXME: user profile
-  const id = data?.user?.doctor_detail?.id; // FIXME: id not accurate
+  const { data, error, status } = useGetUser();
+  const id = data?.user?.id;
+  console.log(id);
+
+  if (!id) return <Spinner />;
   // gets appointments from backend
-  const appts = useGetPatientAppointments(15); // id
+  const appts = useGetPatientAppointments(id); // id
   // const appts = useGetAppointments(14);
-  const appointments = appts.data?.appts ?? []; // To handle undefined data TODO: change in other instances too
+  const appointments = appts.data?.appts ?? [];
 
   return (
     <div className="p-6 flex flex-col">
@@ -40,8 +44,8 @@ const Appointment = () => {
               <div className="bg-[var(--primary-color)] w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ease-in-out">
                 <FiUser className="text-white w-6 h-6 " />
               </div>
-              <div className="font-bold text-xl">{'Huzaifa Kashif'}</div>{' '}
-              {/* FIXME: patient name */}
+              <div className="font-bold text-xl">{data.user?.name}</div>
+
               <div className="ml-auto border-1 rounded-[8px] border-gray-300 bg-gray-300 text-gray-600 text-4 font-semibold px-5 py-1">
                 {appt.appt_status}
               </div>
@@ -50,7 +54,7 @@ const Appointment = () => {
               <div className="flex flex-wrap gap-2">
                 <div>{appt.appt_date}</div>
                 <div>{appt.appt_time}</div>
-                <div>{'12211115444'}</div> {/* FIXME: patient number */}
+                <div>{data.user?.patient_detail?.contact_number}</div>{' '}
               </div>
               <div className="text-gray-400 mt-2 mb-2">
                 {appt.patient_complaint}

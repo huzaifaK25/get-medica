@@ -1,18 +1,23 @@
+'use client';
 import HomeLogo from '@/components/home-logo';
 import { FiBell, FiBox, FiUser } from 'react-icons/fi';
 import SvgAppointment from '@/components/icon-appointment';
 import SvgAvailability from '@/components/icon-availability';
 import SvgDoctor from '@/components/icon-doctor';
 import Link from 'next/link';
+import { useGetUser } from '@/services/queries/doctor.query';
+import { useLogout } from '@/utils/logout';
+import Spinner from '../loading';
 
 interface Props {
   children: React.ReactNode;
 }
 
-type Role = 'doctor' | 'patient';
-let role: Role = 'doctor';
-
 const HomeLayout: React.FC<Props> = ({ children }) => {
+  const { data } = useGetUser();
+  const role = data?.user?.role;
+  console.log(data);
+
   return (
     <div className="flex flex-row h-screen w-vw overflow-x-hidden ">
       {/* side nav bar */}
@@ -52,6 +57,12 @@ const HomeLayout: React.FC<Props> = ({ children }) => {
               </Link>
             </>
           )}
+          <button
+            onClick={useLogout()}
+            className="flex flex-row justify-center gap-1 rounded-[8px] bg-white text-[var(--primary-color)] font-bold w-[80%] pt-1 pb-1 pr-1 pl-1 mt-130 cursor-pointer"
+          >
+            LOGOUT
+          </button>
         </div>
       </nav>
       {/* right panel */}
@@ -68,7 +79,7 @@ const HomeLayout: React.FC<Props> = ({ children }) => {
             <div className="order-2 md:order-none w-30 md:w-40 text-[12px] sm:text-[15px] flex flex-col justify-center items-start ">
               <p className="transition-all duration-300 ease-in-out">Welcome</p>
               <p className="font-bold transition-all duration-300 ease-in-out">
-                Dr. John Doe
+                {data?.user?.name}
               </p>
             </div>
             <div className="order-1 md:order-none">

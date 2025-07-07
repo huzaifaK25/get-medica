@@ -9,9 +9,6 @@ import { redirect } from 'next/navigation';
 // axios instance created
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:8000',
-  headers: {
-    Authorization: `Bearer ${getCookie('accessToken') || ''}`,
-  },
 });
 
 // interceptor request adds JWT to header

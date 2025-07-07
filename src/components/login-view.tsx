@@ -1,19 +1,23 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useLogin } from '@/services/mutations/login.mutation';
-import { deleteCookie, getCookie, setCookie } from 'cookies-next';
+import { setCookie } from 'cookies-next';
 import { useFormik } from 'formik';
 import LoginSchema from '@/utils/login-schema';
 import { useGetUser } from '@/services/queries/doctor.query';
 import { ROUTES } from '@/constants/route';
+import User from '@/constants/user';
+
+interface LoginResponse {
+  user?: User;
+  message: string;
+  access_token: string;
+}
 
 const LoginView = () => {
-  //   () => setCookie('accessToken', { maxAge: 0 });
-
   const router = useRouter();
   const { mutateAsync, isPending } = useLogin();
-
-  const { data, error, status } = useGetUser();
+  // const { data, error, status } = useGetUser();
 
   // using form-state for values
   const formik = useFormik({
@@ -26,26 +30,25 @@ const LoginView = () => {
           setCookie('accessToken', data.access_token);
           resetForm(); // clear after submit
           alert(data.message);
+          routeUser(data);
         },
         onError: (error, variables, context) => {
           alert(error?.message);
         },
       });
-      // gets data of logged in user and reroutes accordingly
     },
   });
-
-  const routeUser = () => {
+  // gets data of logged in user and reroutes accordingly
+  const routeUser = (data: LoginResponse) => {
     if (data) {
+      console.log('LOGGED IN USER: ', data);
       const role = data?.user?.role;
-      console.log(role);
-
       if (role === 'doctor') {
         return router.push(ROUTES.DASHBOARD.DOCTOR_DASH);
       } else if (role === 'patient') {
         return router.push(ROUTES.DASHBOARD.PATIENT_DASH);
       }
-    } else console.log(error);
+    }
   };
 
   // Form Box
@@ -100,7 +103,6 @@ const LoginView = () => {
           <button
             type="submit"
             disabled={isPending}
-            onClick={routeUser}
             className="bg-[var(--primary-color)] text-white w-[485px] h-[60px] px-1 py-5 border-[var(--primary-color)] rounded-xl cursor-pointer mt-7.5 hover:bg-blue-600"
           >
             Continue
